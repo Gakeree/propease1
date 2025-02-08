@@ -1,0 +1,127 @@
+import React from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
+const WelcomeScreen = ({ navigation }) => {
+  return (
+    <ImageBackground
+      source={require('../assets/apart1.jpg')} // Replace with your image path
+      style={styles.background}
+    >
+      <View style={styles.overlay} />
+      <View style={styles.container}>
+        {/* Title */}
+        <Text style={styles.title}>Find the perfect property to live in</Text>
+
+        {/* Social Login Buttons */}
+        <View style={styles.socialButtons}>
+          <TouchableOpacity style={styles.button}>
+            <Ionicons name="logo-google" size={20} color="white" />
+            <Text style={styles.buttonText}>Sign in with Google</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button}>
+            <Ionicons name="logo-facebook" size={20} color="white" />
+            <Text style={styles.buttonText}>Sign in with Facebook</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button}>
+            <Ionicons name="logo-apple" size={20} color="white" />
+            <Text style={styles.buttonText}>Sign in with Apple</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Or Separator */}
+        <Text style={styles.orText}>or</Text>
+
+        {/* Create Account Button */}
+        <TouchableOpacity
+          style={styles.createAccountButton}
+          onPress={() => navigation.navigate('Home')} // Navigate to Home
+        >
+          <Text style={styles.createAccountText}>Create Account</Text>
+        </TouchableOpacity>
+
+        {/* Footer */}
+        <Text style={styles.footer}>
+          Already have an account? <Text style={styles.link}>Login</Text>
+        </Text>
+      </View>
+    </ImageBackground>
+  );
+};
+
+export default WelcomeScreen;
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(110, 104, 104, 0.4)', // Dark overlay
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingBottom:100,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+  socialButtons: {
+    width: '100%',
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginBottom: 15,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    marginLeft: 10,
+  },
+  orText: {
+    color: 'white',
+    marginVertical: 15,
+    fontSize: 16,
+  },
+  createAccountButton: {
+    backgroundColor: 'blue',
+    paddingVertical: 12,
+    paddingHorizontal: 50,
+    borderRadius: 10,
+  },
+  createAccountText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  footer: {
+    color: 'white',
+    marginTop: 20,
+    fontSize: 14,
+  },
+  link: {
+    textDecorationLine: 'underline',
+    color: 'lightblue',
+  },
+});
