@@ -1,18 +1,56 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import { Image, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { Feather, FontAwesome } from 'react-native-vector-icons'
 import propertyData from '../data/property'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Home = () => {
-  const [wishlist, setWishlist] = useState([]);
+  // state to store wishlist items
+  const [wishlist, setWishlist] = useState([])
+  
+  // load wishlist from async storage
 
-  const toggleWishlist = (id) => {
-    if (wishlist.includes(id)) {
-      setWishlist(wishlist.filter((item) => item !== id));
-    } else {
-      setWishlist([...wishlist, id]);
+  useEffect(() => {
+    loadWishlist();
+  }, []);
+
+  const loadWishlist = async () => {
+    try {
+      const savedWishlist = await AsyncStorage.getItem('wishlist');// get the wishlist from async storage
+      if (savedWishlist) {
+        setWishlist(JSON.parse(savedWishlist));
+      }
+    } catch (error) {
+      console.error("Error loading Wishlist", error);
     }
   };
+
+  const toggleWishlist = async (property) => {
+    try {
+      let updatedWishlist = [...wishlist];
+  
+      if (wishlist.some((item) => item.id === property.id)) {
+        // Remove from wishlist
+        updatedWishlist = wishlist.filter((item) => item.id !== property.id);
+        Alert.alert('Removed', 'Removed from Wishlist');
+      } else {
+        // Add to wishlist
+        updatedWishlist.push(property);
+        Alert.alert('Added', 'Added to Wishlist');
+      }
+  
+      // Update state immediately
+      setWishlist(updatedWishlist);
+  
+      // Store updated wishlist in AsyncStorage
+      await AsyncStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+    } catch (error) {
+      console.error('Error updating wishlist:', error);
+    }
+  };
+  
+  
 
   return (
     <View style={styles.container}>
@@ -54,12 +92,12 @@ const Home = () => {
               {/* Wishlist Button */}
               <TouchableOpacity
                 style={styles.wishlistButton}
-                onPress={() => toggleWishlist(item.id)}
+                onPress={() => toggleWishlist(item)}
               >
                 <FontAwesome
-                  name={wishlist.includes(item.id) ? 'heart' : 'heart-o'}
+                  name={wishlist.some(wish => wish.id ===item.id) ? 'heart' : 'heart-o'}
                   size={30}
-                  color={wishlist.includes(item.id) ? '#FFC107' : 'black'}
+                  color={wishlist.some(wish => wish.id ===item.id) ? '#FFC107' : 'black'}
                 />
               </TouchableOpacity>
             </View>
